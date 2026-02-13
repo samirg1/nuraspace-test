@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useDebouncer } from "~/hooks/useDebouncer";
 import { useQuery } from "~/hooks/useQuery";
 import { getWeatherForCity } from "~/server/getWeatherForCity";
@@ -7,7 +8,9 @@ import { Spinner } from "./Spinner";
 export default function WeatherCard({ city }: { city: string }) {
     const loaderValue = useLoader((state) => state.value);
     const setLoader = useLoader((state) => state.set);
-    const cityQuery = useDebouncer(city, 2000, () => setLoader("Loading data..."));
+    const cityQuery = useDebouncer(city, 2000, () =>
+        setLoader("Loading data..."),
+    );
 
     const { data, error } = useQuery({
         queryKey: ["weather", cityQuery],
@@ -18,25 +21,45 @@ export default function WeatherCard({ city }: { city: string }) {
         },
     });
 
+    useEffect(() => {
+        const city = data?.location.name;
+        if (!city) return;
+
+        const ws = new WebSocket(`ws://localhost:3001?city=${city}`);
+
+        ws.onmessage = (event) => {
+            const msg = JSON.parse(event.data);
+            alert(msg.text);
+        };
+
+        return () => ws.close();
+    }, [data?.location?.name]);
+
     return (
         <div className="mx-auto max-w-sm bg-white rounded-xl shadow p-6">
             {loaderValue ? (
-                    <span className="inline-flex items-center gap-2 text-black">
+                <span className="inline-flex items-center gap-2 text-black">
                     {loaderValue} <Spinner />
-                    </span>
+                </span>
             ) : error ? (
                 <p className="text-red-500">Error: {error.message}</p>
             ) : (
                 <>
                     <h3 className="text-xl font-semibold mb-2 text-black">
-                        {data?.location ? `${data.location.name}, ${data.location.region}, ${data.location.country}` : "--"}
+                        {data?.location
+                            ? `${data.location.name}, ${data.location.region}, ${data.location.country}`
+                            : "--"}
                     </h3>
                     <p className="text-black">
                         Temperature Range: {data?.minTemp ?? "--"} °C -{" "}
                         {data?.maxTemp ?? "--"} °C
                     </p>
-                    <p className="text-black">Condition: {data?.condition ?? "--"}</p>
-                    <p className="text-black">Max Wind: {data?.maxWind ?? "--"} km/h</p>
+                    <p className="text-black">
+                        Condition: {data?.condition ?? "--"}
+                    </p>
+                    <p className="text-black">
+                        Max Wind: {data?.maxWind ?? "--"} km/h
+                    </p>
                 </>
             )}
         </div>
