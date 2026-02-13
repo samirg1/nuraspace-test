@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { clients } from "../websocket.ts";
+import { clients } from "../../websocket.ts";
 
 const messageRouter = Router();
 

@@ -18,23 +18,27 @@ type ServerEndpoints =
     | "/auth/login"
     | "/auth/register"
     | "/weather/:city"
+    | "/user/:token";
 
 type EndpointCallerTypes = {
     "/auth/login": "/auth/login";
     "/auth/register": "/auth/register";
     "/weather/:city": `/weather/${string}`;
+    "/user/:token": `/user/${string}`;
 };
 
 type EndpointBodyTypes = {
     "/auth/login": { username: string; password: string };
     "/auth/register": { username: string; password: string };
     "/weather/:city": Record<string, never>;
+    "/user/:token": Record<string, never>;
 };
 
 type EndpointResponseTypes = {
-    "/auth/login": { user: User };
+    "/auth/login": { user: User, token: string };
     "/auth/register": { user: User };
     "/weather/:city": { weather: Weather };
+    "/user/:token": { user: User };
 };
 
 type ServerEndpointToCallerType<T extends ServerEndpoints> =

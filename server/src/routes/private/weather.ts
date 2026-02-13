@@ -1,5 +1,5 @@
-import { getWeatherForCity } from "../services/weatherapi.ts";
-import type { HandlersRecord } from "./baseRoute.ts";
+import { getWeatherForCity } from "../../services/weatherapi.ts";
+import type { HandlersRecord } from "../baseRoute.ts";
 
 export const weatherRoute: Pick<HandlersRecord, "/weather/:city"> = {
     "/weather/:city": {

@@ -13,11 +13,13 @@ const fetchParent = async <T extends ServerEndpoints>(
     method: "POST" | "GET",
     body?: ServerEndpointToBodyType<T>,
 ): Promise<ServerEndpointToResponseType<T>> => {
+    const token = localStorage.getItem("token");
+
     const response = await fetch(`${SERVER_URL}${endpoint}`, {
         method,
         headers: {
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${userIDToken}`,
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify(body),
     });

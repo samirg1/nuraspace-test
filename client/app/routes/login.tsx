@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Spinner } from "~/components/Spinner";
+import { getUser } from "~/server/getUser";
 import { login } from "~/server/login";
 import { useAuthentication } from "~/state/authentication";
 import { useLoader } from "~/state/loading";
@@ -15,6 +16,21 @@ export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const updateAuthFromToken = async () => {
+            const token = localStorage.getItem("token");
+            if (token) {
+                try {
+                    const user = await getUser(token);
+                    setUser(user);
+                } catch (error) {
+                    console.error("Failed to update auth from token:", error);
+                }
+            }
+        };
+        updateAuthFromToken();
+    }, []);
 
     useEffect(() => {
         if (user) navigate("/home");
