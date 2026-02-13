@@ -1,6 +1,6 @@
 import { get } from ".";
 
-export const getUser = async (token: string) => {
-    const { user } = await get<"/user/:token">(`/user/${token}`);
+export const getUser = async () => {
+    const { user } = await get("/user");
     return user;
 };

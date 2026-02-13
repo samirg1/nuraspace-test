@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../constants.ts";
 
-const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
 const JWT_EXPIRES_IN = "7d";
 
 export function signToken(payload: { username: string }) {

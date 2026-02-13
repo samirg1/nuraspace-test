@@ -1,3 +1,5 @@
+import { WEATHER_API_KEY } from "../constants.ts";
+
 interface WeatherInfoByDay {
     mintemp_c: number;
     maxtemp_c: number;
@@ -9,7 +11,7 @@ interface WeatherInfoByDay {
 }
 
 export const getWeatherForCity = async (city: string): Promise<Weather> => {
-    const url = `https://api.weatherapi.com/v1/forecast.json?key=${process.env.WEATHER_API_KEY}&q=${city}&days=1&aqi=no&alerts=no`;
+    const url = `https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=${city}&days=1&aqi=no&alerts=no`;
     const res = await fetch(url);
     if (!res.ok) {
         const text = await res.text();
@@ -18,7 +20,8 @@ export const getWeatherForCity = async (city: string): Promise<Weather> => {
     }
 
     const data = (await res.json()) as any;
-    const dayData = data.forecast.forecastday[0].day as WeatherInfoByDay;
+    const dayData = data?.forecast?.forecastday?.[0]?.day as WeatherInfoByDay | undefined;
+    if (!dayData) throw new Error("No weather data available");
     return {
         location: data.location,
         minTemp: dayData.mintemp_c,

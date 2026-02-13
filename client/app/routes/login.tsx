@@ -22,7 +22,7 @@ export default function Login() {
             const token = localStorage.getItem("token");
             if (token) {
                 try {
-                    const user = await getUser(token);
+                    const user = await getUser();
                     setUser(user);
                 } catch (error) {
                     console.error("Failed to update auth from token:", error);
