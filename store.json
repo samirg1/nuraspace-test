@@ -1,0 +1,16 @@
+{
+    "users": [
+        {
+            "username": "user",
+            "password": "$2b$10$9CNGwUuAYjGdE6wlS6NOHuBgDNPvcdWREHhb5gCTynTTQF1wJay/W",
+            "email": "user1@example.com",
+            "name": "User One"
+        },
+        {
+            "username": "user2",
+            "password": "$2b$10$9CNGwUuAYjGdE6wlS6NOHuBgDNPvcdWREHhb5gCTynTTQF1wJay/W",
+            "email": "user2@example.com",
+            "name": "User Two"
+        }
+    ]
+}
